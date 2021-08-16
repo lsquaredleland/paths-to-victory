@@ -3,10 +3,26 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { DelegateDataProvider } from 'contexts/DelegateData';
+import { Web3ReactProvider } from '@web3-react/core'
+import getLibrary from 'utils/getLibrary'
+
+
+const Providers: React.FC = ({ children }) => {
+  return (
+    <DelegateDataProvider>
+      {children}
+    </DelegateDataProvider>
+  );
+};
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <Providers>
+        <App />
+      </Providers>
+    </Web3ReactProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
