@@ -5,25 +5,26 @@ import { DelegateData } from 'contexts/DelegateData/types';
 import styled from 'styled-components';
 import { useEffect } from 'react';
 import useBlockHeight from 'hooks/useBlockHeight';
+import { fmt } from 'utils/common';
 
 
-const calculateMinDelegatesToQuorum = (
-  quorum: number,
+const calcMinDelegatesToValue = (
+  value: number,
   delegates: DelegateData[],
   voteMinimum: number = 0
 ) => {
   let accumulator: number = 0;
-  let minDelegatesToQuorum: number = 0;
+  let minDelegatesToValue: number = 0;
 
   for (let i: number = 0; i < delegates.length; i++) {
-    accumulator += delegates[i].votes.length >= voteMinimum ? delegates[i].delegatedVotes : 0;
-    if (accumulator >= quorum) {
-      minDelegatesToQuorum = i+1;
+    accumulator += delegates[i].voted >= voteMinimum ? delegates[i].delegatedVotes : 0;
+    if (accumulator >= value) {
+      minDelegatesToValue = i+1;
       break;
     }
   }
 
-  return minDelegatesToQuorum;
+  return minDelegatesToValue;
 }
 
 const H3 = styled.h3`
@@ -33,10 +34,12 @@ const H3 = styled.h3`
 function App() {
 
   const { setProtocol, delegates, setProposalId, blockHeight, setBlockHeight } = useDelegateData();
-  console.log('delegates', delegates)
 
   const latestBlockHeight = useBlockHeight()
-  console.log(latestBlockHeight)
+  
+  useEffect(() => {
+    console.log(latestBlockHeight)
+  }, [latestBlockHeight])
   
   const protocol = "COMPOUND"
   const quorum = 400000; // Have this be an input field
@@ -61,8 +64,14 @@ function App() {
 
   const forVotes = forDelegates.reduce((acc, curr) => acc + curr.votes[0].votes, 0);
   const noVotes = noDelegates.reduce((acc, curr) => acc + curr.votes[0].votes, 0);
-  
-  console.log(forDelegates, noDelegates)
+
+  const votesRequiredToWin = quorum - forVotes;
+
+  const remainingDelegates = delegates.filter(({ voted, votes }: DelegateData) => {
+    return voted > 0 && votes.length === 0
+  })
+
+  console.log(remainingDelegates)
 
   return (
     <div className="App">
@@ -74,15 +83,17 @@ function App() {
             Trigger
           </button>
           <h1>Protocol: {protocol}</h1>
-          <H3>Quorum: {quorum}</H3>
+          <H3>Quorum: {fmt(quorum)}</H3>
           <H3>Block Height: {blockHeight}</H3>
           <H3>Proposal: {proposalId}</H3>
-          <H3>Minimum Delegates to Quorum: {calculateMinDelegatesToQuorum(quorum, delegates, 0)}</H3>
-          <H3>Min Delegates to Quorum w/ ≥ 1 vote: {calculateMinDelegatesToQuorum(quorum, delegates, 1)}</H3>
-          <H3>Current "For" Votes: {forVotes}</H3>
-          <H3>Current "No" Votes: {noVotes}</H3>
+          <H3>Minimum Delegates to Quorum: {calcMinDelegatesToValue(quorum, delegates, 0)}</H3>
+          <H3>Min Delegates to Quorum w/ ≥ 1 vote: {calcMinDelegatesToValue(quorum, delegates, 1)}</H3>
+          <H3>Current "For" Votes: {fmt(forVotes)}</H3>
+          <H3>Current "No" Votes: {fmt(noVotes)}</H3>
           <H3>Quorum met: {forVotes > quorum ? 'YES' : 'NO'}</H3>
           <H3>Proposal currently {forVotes > quorum && forVotes > noVotes ? '' : 'not'} passing</H3>
+          <H3>Additional Votes Required: {fmt(votesRequiredToWin)}</H3>
+          <H3>Min delegates to pursuade: {calcMinDelegatesToValue(votesRequiredToWin, remainingDelegates, 1)}</H3>
         </header>
       </Web3ReactManager>
     </div>
