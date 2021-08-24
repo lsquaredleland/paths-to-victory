@@ -27,6 +27,56 @@ const calcMinDelegatesToValue = (
   return minDelegatesToValue;
 }
 
+
+// Are there optimizations that can be done b/c `delegates` is ordered?
+const calcDelegateCombinations = (
+  minValue: number,
+  de: DelegateData[], // Ordered list
+  voteMinimum: number = 0,
+) => {
+  /*
+    * Look at 1st index, then compare to index 2, 3... until value is less than success break
+    * look at 2nd index, then compare to index 3, 4.. until value is less than success break
+
+    * For 3 items
+    * Look at 1st + 2nd index then compare to 3, 4... " "
+    * Look at 1st + 3rd index then compare to 4, 5... " "
+    * 
+    * For 4 items
+    * Look at 1st, 2nd, 3rd then compare to 4, 5....
+    * Look at 1st, 2nd, 4th then compare to 5, 6....
+    * Look at 1st, 2nd, nth then compare to n+1...
+    * Look at 1st, 3rd, 4th then compare to 5, 6...
+    * Look at 1st, 3rd, 5th etc etc
+  */
+  
+  let count = 0;
+  let depthCount: number[] = [];
+  const calc = (prevStep: number, voterSum: number, depth: number) => {
+    if (depth === 4) {
+      return
+    };
+
+    for (let i = prevStep + 1; i < de.length; i++) {
+      if (depthCount[depth] === undefined) {
+        depthCount.push(0)
+      }
+
+      if (voterSum + de[i].delegatedVotes > minValue) {
+        count++
+        depthCount[depth] += 1
+        continue
+      }
+      
+      calc(i, voterSum + de[i].delegatedVotes, depth + 1)
+    }
+  }
+
+  calc(-1,0,0);
+
+  return { depthCount, count }
+}
+
 const H3 = styled.h3`
   margin: 0px;
 `;
@@ -73,6 +123,10 @@ function App() {
 
   console.log(remainingDelegates)
 
+  // Need to call this function less -> useMemo...
+  const { depthCount, count } = calcDelegateCombinations(votesRequiredToWin, remainingDelegates)
+  console.log("count", count, depthCount)
+
   return (
     <div className="App">
       <Web3ReactManager>
@@ -93,7 +147,8 @@ function App() {
           <H3>Quorum met: {forVotes > quorum ? 'YES' : 'NO'}</H3>
           <H3>Proposal currently {forVotes > quorum && forVotes > noVotes ? '' : 'not'} passing</H3>
           <H3>Additional Votes Required: {fmt(votesRequiredToWin)}</H3>
-          <H3>Min delegates to pursuade: {calcMinDelegatesToValue(votesRequiredToWin, remainingDelegates, 1)}</H3>
+          <H3>numbers of vote combinations</H3>
+          <H3>one: {depthCount[0]}, two: {depthCount[1]}, three: {depthCount[2]}, four: {depthCount[3]}, five: {depthCount[4]}</H3>
         </header>
       </Web3ReactManager>
     </div>
