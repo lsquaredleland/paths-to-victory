@@ -3,16 +3,16 @@ import { DelegateData } from "./types";
 
 
 interface DelegateDataContext {
-  setProtocol: (update: string) => void;
   setProposalId: (update: number) => void;
+  proposalId: number;
   delegates: DelegateData[];
   blockHeight: number;
   setBlockHeight: (update: number) => void;
 }
 
 const Context = createContext<DelegateDataContext>({
-  setProtocol: (update: string) => {},
   setProposalId: (update: number) => {},
+  proposalId: 0,
   delegates: [],
   setBlockHeight: (update: number) => {},
   blockHeight: 0,

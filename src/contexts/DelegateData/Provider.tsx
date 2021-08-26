@@ -1,38 +1,30 @@
 import React, { useState, useEffect } from "react";
 import Context from "./Context";
 import { fetchTopDelegates } from "./fetchDelegates"
-import {
-  // radicleClient,
-  // poolClient,
-  // uniswapClient,
-  // aaveClient,
-  compoundClient,
-  // feiClient,
-  // gitcoinClient
-} from 'apollo/client'
 import { useActiveWeb3React } from "hooks/connectivity"
-import ApolloClient from "apollo-client";
-import { NormalizedCacheObject } from "apollo-cache-inmemory";
 import { DelegateData, DelegateDataResponse } from "./types";
+import { useProtocols } from "contexts/Protocols";
 
 
 const Provider: React.FC = ({ children }) => {
 
   const { library } = useActiveWeb3React();
-  const [client, setClient] = useState<ApolloClient<NormalizedCacheObject>>(compoundClient);
+  const { activeProtocol } = useProtocols();
+
   const [error, setError] = useState<string>('');
-  const [protocol, setProtocol] = useState<string>('COMPOUND')
   const [delegates, setDelegates] = useState<DelegateData[]>([])
-  const [proposalId, setProposalId] = useState<number>(1);
-  const [blockHeight, setBlockHeight] = useState<number>(0); // temporary placeholder
+  const [proposalId, setProposalId] = useState<number>(53);
+  const [blockHeight, setBlockHeight] = useState<number>(12926675); // temporary placeholder
   
   const minBalance = 1;
-  
+
+
   useEffect(() => {
+    console.log("Fetch Attempt -", activeProtocol.id)
     try {
       library &&
-      client &&
-      fetchTopDelegates(client, library, setError, minBalance, proposalId, blockHeight).then(async response => {
+      activeProtocol.client &&
+      fetchTopDelegates(activeProtocol.client, library, setError, minBalance, proposalId, blockHeight).then(async response => {
         if (response) {
           // Probably should define a data type for the response
           const parsed = response.map((d: DelegateDataResponse) => ({
@@ -45,6 +37,7 @@ const Provider: React.FC = ({ children }) => {
               votes: Number(v.votes)
             }))
           }))
+          console.log("setting data")
           setDelegates(parsed)
         }
       })
@@ -52,13 +45,13 @@ const Provider: React.FC = ({ children }) => {
       console.log('ERROR:' + e)
       setError('ERROR:' + e)
     }
-  }, [fetchTopDelegates, client, protocol, minBalance, proposalId])
+  }, [fetchTopDelegates, activeProtocol.client, minBalance, proposalId, blockHeight])
   
   return (
     <Context.Provider
       value={{
-        setProtocol,
         setProposalId,
+        proposalId,
         delegates,
         blockHeight,
         setBlockHeight

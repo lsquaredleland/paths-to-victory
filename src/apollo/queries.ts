@@ -1,8 +1,6 @@
 import gql from 'graphql-tag'
 
 const FETCHING_INTERVAL = 500;
-const MIN_BALANCE = 1; // Should be conditional on the protocol
-const proposalId = 42;
 
 // Might make sense to search for specific proposals
 // Especially b/c proposal.id is a string... so sort order has no impact
@@ -33,6 +31,19 @@ export const TOP_DELEGATES_SEARCH = (minBalance: number, proposalId: number, blo
     }
   `
 }
+
+export const GLOBAL_DATA = gql`
+  query governance {
+    governances(first: 1) {
+      delegatedVotes
+      delegatedVotesRaw
+      totalTokenHolders
+      totalDelegates
+      proposals
+      currentTokenHolders
+    }
+  }
+`
 
 export const TOP_DELEGATES = gql`
   query delegates {
