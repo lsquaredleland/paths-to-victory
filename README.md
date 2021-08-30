@@ -7,11 +7,6 @@ How many votes are required to get a proposal passed
 - Need to get the most current proposal (via global data)
 - All the people to vote against to not pass it (look at the combo)
 
-## Questions
-- Are there algorithms to automatically determine how many combinations exist?
-- Could number of combos to have only 1 voter, only 2 voters... only n votes?
-
-
 ### TEST CASES
 - `blockHeight`: 12926675, `protocol`: Compound, `proposalId`: 53
 

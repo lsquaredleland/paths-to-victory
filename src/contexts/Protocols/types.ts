@@ -1,6 +1,7 @@
 import { NormalizedCacheObject } from "apollo-cache-inmemory";
 import ApolloClient from "apollo-client";
 
+
 export interface SerializedToken {
   chainId: number
   address: string
@@ -23,4 +24,17 @@ export interface GovernanceInfo {
   emoji?: string
   quorum: number
   client: ApolloClient<NormalizedCacheObject>
+}
+
+export interface GlobalDatas {
+  [id: string]: GlobalData | null
+}
+
+export interface GlobalData {
+  totalTokenHolders: number
+  totalDelegates: number
+  delegatedVotes: number
+  delegatedVotesRaw: number
+  proposals: number
+  currentTokenHolders: number
 }

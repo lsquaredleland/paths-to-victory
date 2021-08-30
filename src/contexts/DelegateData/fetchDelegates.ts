@@ -68,9 +68,10 @@ export async function fetchTopDelegates(
   minBalance: number,
   proposalId: number,
   blockHeight: number,
+  votingParticipationMin: number,
 ): Promise<DelegateDataResponse[] | null> {
   return fetchDelegatesFromClient(client, library, setError, {
-    query: TOP_DELEGATES_SEARCH(minBalance, proposalId, blockHeight),
+    query: TOP_DELEGATES_SEARCH(minBalance, proposalId, blockHeight, votingParticipationMin),
     fetchPolicy: 'cache-first'
   })
 }

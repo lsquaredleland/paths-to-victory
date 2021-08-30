@@ -44,10 +44,11 @@ export const UNISWAP_GOVERNANCE: GovernanceInfo = {
   governanceAddress: UNI_GOVERNANCE_ADDRESS,
   social: '@UniswapProtocol',
   emoji: '🦄',
-  quorum: 400000,
+  quorum: 40000000, // 40m
   client: uniswapClient,
 }
 
+// Note this is the GovernorAlpha NOT GovernorBravo address....
 export const COMP_GOVERNANCE_ADDRESS = '0xc0dA01a04C3f3E0be433606045bB7017A7323E38'
 export const COMP_ADDRESS = '0xc00e94cb662c3520282e6f5717214004a7f26888'
 const COMP = new Token(ChainId.MAINNET, COMP_ADDRESS, 18, 'COMP', 'Compound Governance Token')
@@ -62,7 +63,7 @@ export const COMPOUND_GOVERNANCE: GovernanceInfo = {
   governanceAddress: COMP_GOVERNANCE_ADDRESS,
   social: '@compoundfinance',
   emoji: '🏦',
-  quorum: 400000,
+  quorum: 400000, // 400k
   client: compoundClient,
 }
 
@@ -80,7 +81,7 @@ export const AAVE_GOVERNANCE: GovernanceInfo = {
   governanceAddress: AAVE_GOVERNANCE_ADDRESS,
   social: '@AaveAave',
   emoji: '👻',
-  quorum: 400000,
+  quorum: 400000, // Aave doesn't use governorAlpha... look more into this
   client: aaveClient,
 }
 
@@ -98,7 +99,7 @@ export const POOL_TOGETHER_GOVERNANCE: GovernanceInfo = {
   governanceAddress: POOL_TOGETHER_GOVERNANCE_ADDRESS,
   social: '@PoolTogether_',
   emoji: '🏆',
-  quorum: 400000,
+  quorum: 100000000000000000000000 / 1e18, // 100k
   client: poolClient,
 }
 
@@ -116,7 +117,7 @@ export const RADICLE_GOVERNANCE: GovernanceInfo = {
   governanceAddress: RADICLE_GOVERNANCE_ADDRESS,
   social: '@radicle',
   emoji: '🌱',
-  quorum: 400000,
+  quorum: 1000000000000000000000000 / 1e18, // 1m
   client: radicleClient,
 }
 
@@ -134,7 +135,7 @@ export const FEI_GOVERNANCE: GovernanceInfo = {
   governanceAddress: FEI_GOVERNANCE_ADDRESS,
   social: '@feiprotocol',
   emoji: '🌱',
-  quorum: 400000,
+  quorum: 25000000000000000000000000 / 1e18, // 25m
   client: feiClient,
 }
 
@@ -152,7 +153,7 @@ export const GITCOIN_GOVERNANCE: GovernanceInfo = {
   governanceAddress: GITCOIN_GOVERNANCE_ADDRESS,
   social: '@gitcoin',
   emoji: '🌱',
-  quorum: 400000,
+  quorum: 2500000000000000000000000 / 1e18, // 2.5m
   client: gitcoinClient,
 }
 

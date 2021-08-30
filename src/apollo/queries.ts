@@ -2,10 +2,13 @@ import gql from 'graphql-tag'
 
 const FETCHING_INTERVAL = 500;
 
-// Might make sense to search for specific proposals
-// Especially b/c proposal.id is a string... so sort order has no impact
-
-export const TOP_DELEGATES_SEARCH = (minBalance: number, proposalId: number, blockHeight: number) => {
+// `first` cannot be 0 -> defaulting it to 1
+export const TOP_DELEGATES_SEARCH = (
+  minBalance: number,
+  proposalId: number,
+  blockHeight: number,
+  votingParticipationMin: number
+) => {
   return gql`
     query delegates {
       delegates(
@@ -24,7 +27,7 @@ export const TOP_DELEGATES_SEARCH = (minBalance: number, proposalId: number, blo
           votes
           support
         }
-        voted: votes(first: 1) {
+        voted: votes(first: ${votingParticipationMin === 0 ? 1 : votingParticipationMin}) {
           id
         }
       }

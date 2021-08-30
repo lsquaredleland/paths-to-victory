@@ -1,23 +1,22 @@
 import { GLOBAL_DATA } from 'apollo/queries'
-
-
-export interface GlobaData {
-  id: string
-  totalTokenHolders: number
-  totalDelegates: number
-  delegatedVotes: number
-  delegatedVotesRaw: number
-  proposals: number
-  currentTokenHolders: number
-}
+import { GlobalData } from './types';
 
 interface GlobalResponse {
   data: {
-    governances: GlobaData[]
+    governances: GlobalData[]
   }
 }
 
-export async function fetchGlobalData(client: any): Promise<GlobaData | null> {
+const convertNumberObj = (obj: any) => {
+  const res: any = {}
+  for (const key in obj) {
+    const parsed = Number(obj[key])
+    res[key] = isNaN(parsed) ? obj[key] : parsed;
+  }
+  return res;
+}
+
+export async function fetchGlobalData(client: any): Promise<GlobalData | null> {
   if (!client) {
     return null
   }
@@ -28,7 +27,7 @@ export async function fetchGlobalData(client: any): Promise<GlobaData | null> {
     })
     .then(async (res: GlobalResponse) => {
       if (res) {
-        return res.data.governances[0]
+        return convertNumberObj(res.data.governances[0])
       } else {
         return Promise.reject('Error fetching global data')
       }

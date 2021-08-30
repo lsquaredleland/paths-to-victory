@@ -22,7 +22,7 @@ export function calcDelegateCombinations(
     * Look at 1st, 3rd, 5th etc etc
   */
   
-  let count = 0;
+  // let count = 0;
   let depthCount: number[] = [];
   const calc = (prevStep: number, voterSum: number, depth: number) => {
     if (depth === maxDepth || minValue === 0) {
@@ -35,7 +35,7 @@ export function calcDelegateCombinations(
       }
 
       if (voterSum + de[i].delegatedVotes > minValue) {
-        count++
+        // count++
         depthCount[depth] += 1
         continue
       }
@@ -44,7 +44,7 @@ export function calcDelegateCombinations(
     }
   }
 
-  console.log("start computationally intensive task", de)
+  console.log("start computationally intensive task")
   calc(-1,0,0);
   console.log("finish")
 
