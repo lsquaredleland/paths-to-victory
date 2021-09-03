@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 
 import { calcDelegateCombinations } from 'utils/delegateCombinations';
 import { DelegateData } from 'contexts/DelegateData/types';
-import { Inline } from 'components/BasicStyles';
-import { Table } from '@chakra-ui/react';
+import { Table, Tr, Th, Td } from '@chakra-ui/react';
+import { Inline, H3 } from 'components/BasicStyles';
 
 
 interface CombinationsComponentProps {
@@ -18,24 +18,30 @@ const CombinationsComponent = ({ votesRequiredToWin, remainingDelegates, maxDept
   }, [votesRequiredToWin, remainingDelegates, maxDepth])
 
   return (
-    <Inline>
+    <div>
+      <Inline>
+        <div>
+          <H3>Vote Combinations</H3>
+          <p style={{margin: "0px"}}>How many unique combinations of voters are there to pass the proposal. Requiring only 1, 2, 3, etc delegates to act</p>
+        </div>
+      </Inline>
       <Table style={{textAlign: "right"}}>
-        <tr>
-          <th>One</th>
-          <th>Two</th>
-          <th>Three</th>
-          <th>Four</th>
-          <th>Five</th>
-        </tr>
-        <tr>
-          <td>{depthCount[0] || 0}</td>
-          <td>{depthCount[1] || 0}</td>
-          <td>{depthCount[2] || 0}</td>
-          <td>{depthCount[3] || 0}</td>
-          <td>{depthCount[4] || 0}</td>
-        </tr>
+        <Tr>
+          <Th>One</Th>
+          <Th>Two</Th>
+          <Th>Three</Th>
+          <Th>Four</Th>
+          <Th>Five</Th>
+        </Tr>
+        <Tr>
+          <Td>{depthCount[0] || 0}</Td>
+          <Td>{depthCount[1] || 0}</Td>
+          <Td>{depthCount[2] || 0}</Td>
+          <Td>{depthCount[3] || 0}</Td>
+          <Td>{depthCount[4] || 0}</Td>
+        </Tr>
       </Table>
-    </Inline>
+    </div>
   )
 }
 

@@ -22,6 +22,8 @@ const ProtocolSelector = () => {
             key={i}
             onClick={() => onClick(protocol)}
             variant="primary"
+            size="sm"
+            style={{marginRight: 'var(--chakra-space-2)', marginBottom: 'var(--chakra-space-2)'}}
           >
             {protocol.name} ({globalData[protocol.id]?.proposals})
           </Button>

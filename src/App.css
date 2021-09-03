@@ -1,5 +1,10 @@
 .App {
-
+  font-family: var(--chakra-fonts-body);
+  color: var(--chakra-colors-gray-800);
+  background: var(--chakra-colors-white);
+  transition-property: background-color;
+  transition-duration: var(--chakra-transition-duration-normal);
+  line-height: var(--chakra-lineHeights-base);
 }
 
 .App-logo {

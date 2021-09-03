@@ -10,8 +10,14 @@ import { useProtocols } from 'contexts/Protocols';
 import { H2, H3, Inline, Wrapper } from 'components/BasicStyles';
 import CombinationsComponent from 'page/CombinationsComponent';
 import ProtocolSelector from 'components/ProtocolSelector';
-import { Table, Input, Button } from '@chakra-ui/react'
+import { Table, Tr, Th, Td, Input, Button } from '@chakra-ui/react'
+import styled from 'styled-components';
+import Footer from 'page/Footer';
 
+
+const Spacer = styled.div`
+  padding-bottom: var(--chakra-space-10);
+`;
 
 interface TextFieldProps {
   value: string | number;
@@ -55,6 +61,16 @@ const votesToWin = (forVotes: number, noVotes: number, quorum: number) => {
     return quorum - forVotes
   }
 }
+
+const HeaderSection = styled.section`
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  box-shadow: var(--chakra-shadows-none);
+  margin-bottom: var(--chakra-space-8);
+  margin-top: var(--chakra-space-8); /* var(--chakra-space-12); */
+  padding-top: 0px;
+  padding-inline: 0px;
+`;
 
 function App() {
 
@@ -117,20 +133,13 @@ function App() {
   return (
     <div className="App">
       <Web3ReactManager>
-        <div style={{ textAlign: 'left', padding: '50px' }}>
-          <header>
-            <ProtocolSelector />
+        <div style={{ textAlign: 'left', padding: '50px 50px 0px 50px' }}>
+          <ProtocolSelector />
+          <HeaderSection>
             <H2>Protocol: {activeProtocol.name.replace('Governance','')}</H2>
-          </header>
+          </HeaderSection>
           <div>
-            <Inline>
-              <H3>Quorum:</H3>
-              {/* <TextField
-                value={quorum}
-                onChange={setQuorum}
-              /> */}
-              <H3> {nFormatter(quorum,0,"")} {activeProtocol.token.symbol}</H3>
-            </Inline>
+            <H3>Quorum:{" "}{nFormatter(quorum,0,"")} {activeProtocol.token.symbol}</H3>
             <BlockHeightComponent />
             <Inline>
               <H3>Proposal Id:</H3>
@@ -156,31 +165,24 @@ function App() {
             </Inline>
             <Wrapper>
               <Table style={{textAlign: "right"}}>
-                <tr>
-                  <th>For</th>
-                  <th>Against</th>
-                  <th>Quorum Met</th>
-                  <th>Proposal Passing</th>
-                </tr>
-                <tr>
-                  <td>{fmt(forVotes)}</td>
-                  <td>{fmt(noVotes)}</td>
-                  <td>{forVotes > quorum ? 'YES' : 'NO'}</td>
-                  <td>{forVotes > quorum && forVotes > noVotes ? 'YES' : 'NO'}</td>
-                </tr>
+                <Tr>
+                  <Th>For</Th>
+                  <Th>Against</Th>
+                  <Th>Quorum Met</Th>
+                  <Th>Proposal Passing</Th>
+                </Tr>
+                <Tr>
+                  <Td>{fmt(forVotes)}</Td>
+                  <Td>{fmt(noVotes)}</Td>
+                  <Td>{forVotes > quorum ? 'YES' : 'NO'}</Td>
+                  <Td>{forVotes > quorum && forVotes > noVotes ? 'YES' : 'NO'}</Td>
+                </Tr>
               </Table>
-              <Inline>
-                <H3>Additional Votes Required: {fmt(votesRequiredToWin)}</H3>
-              </Inline>
             </Wrapper>
-            <br />
+            <Inline>
+              <H3>Additional Votes Required: {fmt(votesRequiredToWin)}</H3>
+            </Inline>
             <Wrapper>
-              <Inline>
-                <div>
-                  <H3>Vote Combinations</H3>
-                  <p style={{margin: "0px"}}>(How many unique combinations of voters are there to pass the proposal. Requiring only 1, 2, 3, etc delegates to act)</p>
-                </div>
-              </Inline>
               <CombinationsComponent
                 votesRequiredToWin={votesRequiredToWin}
                 remainingDelegates={remainingDelegates}
@@ -188,6 +190,8 @@ function App() {
               />
             </Wrapper>
           </div>
+          <Spacer />
+          <Footer />
         </div>
       </Web3ReactManager>
     </div>

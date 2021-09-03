@@ -6,12 +6,15 @@ export const H3 = styled.h3`
   font-family: Montserrat;
   font-size: var(--chakra-fontSizes-xl);
   font-weight: var(--chakra-fontWeights-semibold);
-  line-height: 1.875rem;
+  line-height: var(--chakra-sizes-10); /*1.875rem;*/
+  padding-right: 0.5rem;
 `;
 
 export const Inline = styled.div`
   display: flex;
   width: 100%
+  padding-bottom: 0.25rem;
+  padding-top: 0.25rem;
 `;
 
 export const H2 = styled.h2`
