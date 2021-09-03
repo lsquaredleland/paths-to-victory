@@ -78,7 +78,9 @@ function App() {
     delegates,
     setProposalId, proposalId,
     setBlockHeight, blockHeight,
-    setVotingParticipationMin, votingParticipationMin
+    setVotingParticipationMin, votingParticipationMin,
+    loading,
+    error
   } = useDelegateData();
   const { activeProtocol, globalData } = useProtocols();
   const [quorum, setQuorum] = useState<number>(400000)
@@ -137,6 +139,7 @@ function App() {
           <ProtocolSelector />
           <HeaderSection>
             <H2>Protocol: {activeProtocol.name.replace('Governance','')}</H2>
+            {error !== '' ? <p style={{color:"maroon"}}>{error}</p> : null}
           </HeaderSection>
           <div>
             <H3>Quorum:{" "}{nFormatter(quorum,0,"")} {activeProtocol.token.symbol}</H3>
@@ -148,6 +151,12 @@ function App() {
                 value={proposalId}
                 onChange={setProposalId}
               />
+              <Button
+                onClick={() => setProposalId(globalData[activeProtocol.id]?.proposals || 0)}
+                size="md"
+              >
+                View Most Recent Proposal
+              </Button>
             </Inline>
             <Inline>
               <H3>Minimum Voting Actions:</H3>
@@ -172,10 +181,10 @@ function App() {
                   <Th>Proposal Passing</Th>
                 </Tr>
                 <Tr>
-                  <Td>{fmt(forVotes)}</Td>
-                  <Td>{fmt(noVotes)}</Td>
-                  <Td>{forVotes > quorum ? 'YES' : 'NO'}</Td>
-                  <Td>{forVotes > quorum && forVotes > noVotes ? 'YES' : 'NO'}</Td>
+                  <Td>{loading ? 'loading' : fmt(forVotes)}</Td>
+                  <Td>{loading ? 'loading' : fmt(noVotes)}</Td>
+                  <Td>{loading ? 'loading' : forVotes > quorum ? 'YES' : 'NO'}</Td>
+                  <Td>{loading ? 'loading' : forVotes > quorum && forVotes > noVotes ? 'YES' : 'NO'}</Td>
                 </Tr>
               </Table>
             </Wrapper>
@@ -187,6 +196,7 @@ function App() {
                 votesRequiredToWin={votesRequiredToWin}
                 remainingDelegates={remainingDelegates}
                 maxDepth={maxDepth}
+                loading={loading}
               />
             </Wrapper>
           </div>

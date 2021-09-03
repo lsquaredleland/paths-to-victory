@@ -11,6 +11,7 @@ interface DelegateDataContext {
   setVotingParticipationMin: (update: number) => void;
   votingParticipationMin: number;
   error: string;
+  loading: boolean;
 }
 
 const Context = createContext<DelegateDataContext>({
@@ -22,6 +23,7 @@ const Context = createContext<DelegateDataContext>({
   setVotingParticipationMin: (update: number) => {},
   votingParticipationMin: 1,
   error: '',
+  loading: false,
 });
 
 export default Context;

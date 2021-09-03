@@ -1,27 +1,28 @@
 import { DelegateData } from "contexts/DelegateData/types";
 
+
+/* Algorithm details
+  * Look at 1st index, then compare to index 2, 3... until value is less than success break
+  * look at 2nd index, then compare to index 3, 4.. until value is less than success break
+
+  * For 3 items
+  * Look at 1st + 2nd index then compare to 3, 4... " "
+  * Look at 1st + 3rd index then compare to 4, 5... " "
+  * 
+  * For 4 items
+  * Look at 1st, 2nd, 3rd then compare to 4, 5....
+  * Look at 1st, 2nd, 4th then compare to 5, 6....
+  * Look at 1st, 2nd, nth then compare to n+1...
+  * Look at 1st, 3rd, 4th then compare to 5, 6...
+  * Look at 1st, 3rd, 5th etc etc
+*/
+
 // Are there optimizations that can be done b/c `delegates` is ordered?
 export function calcDelegateCombinations(
   minValue: number,
   de: DelegateData[], // Ordered list
   maxDepth: number = 5,
 ) : number[] {
-  /*
-    * Look at 1st index, then compare to index 2, 3... until value is less than success break
-    * look at 2nd index, then compare to index 3, 4.. until value is less than success break
-
-    * For 3 items
-    * Look at 1st + 2nd index then compare to 3, 4... " "
-    * Look at 1st + 3rd index then compare to 4, 5... " "
-    * 
-    * For 4 items
-    * Look at 1st, 2nd, 3rd then compare to 4, 5....
-    * Look at 1st, 2nd, 4th then compare to 5, 6....
-    * Look at 1st, 2nd, nth then compare to n+1...
-    * Look at 1st, 3rd, 4th then compare to 5, 6...
-    * Look at 1st, 3rd, 5th etc etc
-  */
-  
   // let count = 0;
   let depthCount: number[] = [];
   const calc = (prevStep: number, voterSum: number, depth: number) => {
@@ -44,9 +45,14 @@ export function calcDelegateCombinations(
     }
   }
 
-  console.log("start computationally intensive task")
+  if (minValue === 0) {
+    return depthCount
+  }
+
+  const t0 = performance.now()
+  console.log("start computational task -", de.length, "delegates")
   calc(-1,0,0);
-  console.log("finish")
+  console.log("finish:", (performance.now() - t0) / 1000, "seconds")
 
   return depthCount
 }

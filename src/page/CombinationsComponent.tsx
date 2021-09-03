@@ -8,11 +8,17 @@ import { Inline, H3 } from 'components/BasicStyles';
 
 interface CombinationsComponentProps {
   votesRequiredToWin: number;
-  remainingDelegates: DelegateData[]
-  maxDepth: number
+  remainingDelegates: DelegateData[];
+  maxDepth: number;
+  loading: boolean;
 }
 
-const CombinationsComponent = ({ votesRequiredToWin, remainingDelegates, maxDepth }: CombinationsComponentProps) => {
+const CombinationsComponent = ({
+  votesRequiredToWin,
+  remainingDelegates,
+  maxDepth,
+  loading
+}: CombinationsComponentProps) => {
   const depthCount: number[] = useMemo(() => {
     return calcDelegateCombinations(votesRequiredToWin, remainingDelegates, maxDepth)
   }, [votesRequiredToWin, remainingDelegates, maxDepth])
@@ -34,11 +40,11 @@ const CombinationsComponent = ({ votesRequiredToWin, remainingDelegates, maxDept
           <Th>Five</Th>
         </Tr>
         <Tr>
-          <Td>{depthCount[0] || 0}</Td>
-          <Td>{depthCount[1] || 0}</Td>
-          <Td>{depthCount[2] || 0}</Td>
-          <Td>{depthCount[3] || 0}</Td>
-          <Td>{depthCount[4] || 0}</Td>
+          <Td>{loading ? 'loading' : depthCount[0] || 0}</Td>
+          <Td>{loading ? 'loading' : depthCount[1] || 0}</Td>
+          <Td>{loading ? 'loading' : depthCount[2] || 0}</Td>
+          <Td>{loading ? 'loading' : depthCount[3] || 0}</Td>
+          <Td>{loading ? 'loading' : depthCount[4] || 0}</Td>
         </Tr>
       </Table>
     </div>

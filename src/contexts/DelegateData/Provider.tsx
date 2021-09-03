@@ -17,6 +17,7 @@ const Provider: React.FC = ({ children }) => {
   const [proposalId, setProposalId] = useState<number>(53);
   const [blockHeight, setBlockHeight] = useState<number>(12926675); // temporary placeholder
   const [votingParticipationMin, setVotingParticipationMin] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(true);
   
   const minBalance = 1;
 
@@ -30,6 +31,8 @@ const Provider: React.FC = ({ children }) => {
   }, [latestBlockHeight])
 
   useEffect(() => {
+    setLoading(true) // Is this being set here at all?
+    setError('')
     console.log("Fetch Attempt -", minBalance, proposalId, blockHeight, votingParticipationMin)
     try {
       library &&
@@ -48,6 +51,7 @@ const Provider: React.FC = ({ children }) => {
             }))
           }))
           console.log("setting data")
+          setLoading(false)
           setDelegates(parsed)
         }
       })
@@ -55,7 +59,7 @@ const Provider: React.FC = ({ children }) => {
       console.log('ERROR:' + e)
       setError('ERROR:' + e)
     }
-  }, [library, activeProtocol.client, minBalance, proposalId, blockHeight, votingParticipationMin])
+  }, [setLoading, library, activeProtocol.client, minBalance, proposalId, blockHeight, votingParticipationMin])
   
   return (
     <Context.Provider
@@ -64,7 +68,8 @@ const Provider: React.FC = ({ children }) => {
         setBlockHeight, blockHeight,
         setVotingParticipationMin, votingParticipationMin,
         delegates,
-        error
+        error,
+        loading
       }}
     >
       {children}
