@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { calcDelegateCombinations } from 'utils/delegateCombinations';
 import { DelegateData } from 'contexts/DelegateData/types';
 import { Inline } from 'components/BasicStyles';
+import { Table } from '@chakra-ui/react';
 
 
 interface CombinationsComponentProps {
@@ -18,22 +19,22 @@ const CombinationsComponent = ({ votesRequiredToWin, remainingDelegates, maxDept
 
   return (
     <Inline>
-      <table style={{textAlign: "right", border: "2px solid white"}}>
-        <tr style={{border: "2px solid white"}}>
-          <th style={{border: "2px solid white"}}>One</th>
-          <th style={{border: "2px solid white"}}>Two</th>
-          <th style={{border: "2px solid white"}}>Three</th>
-          <th style={{border: "2px solid white"}}>Four</th>
-          <th style={{border: "2px solid white"}}>Five</th>
+      <Table style={{textAlign: "right"}}>
+        <tr>
+          <th>One</th>
+          <th>Two</th>
+          <th>Three</th>
+          <th>Four</th>
+          <th>Five</th>
         </tr>
-        <tr style={{border: "2px solid white"}}>
-          <td style={{border: "2px solid white"}}>{depthCount[0] || 0}</td>
-          <td style={{border: "2px solid white"}}>{depthCount[1] || 0}</td>
-          <td style={{border: "2px solid white"}}>{depthCount[2] || 0}</td>
-          <td style={{border: "2px solid white"}}>{depthCount[3] || 0}</td>
-          <td style={{border: "2px solid white"}}>{depthCount[4] || 0}</td>
+        <tr>
+          <td>{depthCount[0] || 0}</td>
+          <td>{depthCount[1] || 0}</td>
+          <td>{depthCount[2] || 0}</td>
+          <td>{depthCount[3] || 0}</td>
+          <td>{depthCount[4] || 0}</td>
         </tr>
-      </table>
+      </Table>
     </Inline>
   )
 }

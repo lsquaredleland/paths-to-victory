@@ -8,14 +8,28 @@ import getLibrary from 'utils/getLibrary'
 import { ProtocolsProvider } from 'contexts/Protocols';
 import { DelegateDataProvider } from 'contexts/DelegateData';
 
+// Chakra
+import { ChakraProvider } from '@chakra-ui/react'
+
+// Theme
+import 'typeface-open-sans'
+import 'typeface-inter'
+import 'typeface-montserrat'
+import 'typeface-source-code-pro'
+import 'typeface-dm-sans'
+
+import theme from 'theme'
+
 
 const Providers: React.FC = ({ children }) => {
   return (
-    <ProtocolsProvider>
-      <DelegateDataProvider>
-        {children}
-      </DelegateDataProvider>
-    </ProtocolsProvider>
+    <ChakraProvider theme={theme}>
+      <ProtocolsProvider>
+        <DelegateDataProvider>
+          {children}
+        </DelegateDataProvider>
+      </ProtocolsProvider>
+    </ChakraProvider>
   );
 };
 

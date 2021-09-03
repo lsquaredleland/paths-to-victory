@@ -1,6 +1,7 @@
 import { useDelegateData } from 'contexts/DelegateData';
 import { useProtocols } from 'contexts/Protocols';
 import { GovernanceInfo } from 'contexts/Protocols/types';
+import { Button } from '@chakra-ui/react'
 
 
 const ProtocolSelector = () => {
@@ -17,12 +18,13 @@ const ProtocolSelector = () => {
     <div>
       {allProtocols.map((protocol: GovernanceInfo, i: number) => {
         return (
-          <button
+          <Button
             key={i}
             onClick={() => onClick(protocol)}
+            variant="primary"
           >
             {protocol.name} ({globalData[protocol.id]?.proposals})
-          </button>
+          </Button>
         )
       })}
     </div>

@@ -7,9 +7,10 @@ import useBlockHeight from 'hooks/useBlockHeight';
 import { fmt, nFormatter } from 'utils/common';
 import { calcMinDelegatesToValue } from 'utils/delegateCombinations';
 import { useProtocols } from 'contexts/Protocols';
-import { H3, Inline } from 'components/BasicStyles';
+import { H2, H3, Inline, Wrapper } from 'components/BasicStyles';
 import CombinationsComponent from 'page/CombinationsComponent';
 import ProtocolSelector from 'components/ProtocolSelector';
+import { Table, Input, Button } from '@chakra-ui/react'
 
 
 interface TextFieldProps {
@@ -28,12 +29,14 @@ const TextField = ({ value, onChange, type='string', disabled=false, placeholder
   };
 
   return (
-    <input
+    <Input
       value={value}
       type={type}
       disabled={disabled}
       placeholder="Enter proposal id"
       onChange={change}
+      style={{width: "150px"}}
+      size="md"
     />
   )
 }
@@ -102,11 +105,12 @@ function App() {
         value={blockHeight}
         onChange={setBlockHeight}
       />
-      <button
+      <Button
         onClick={() => setBlockHeight(latestBlockHeight)}
+        size="md"
       >
-        Use current BlockHeight
-      </button>
+        Use Current Block Height
+      </Button>
     </Inline>
   )
 
@@ -116,7 +120,7 @@ function App() {
         <div style={{ textAlign: 'left', padding: '50px' }}>
           <header>
             <ProtocolSelector />
-            <h1>Protocol: {activeProtocol.name.replace('Governance','')}</h1>
+            <H2>Protocol: {activeProtocol.name.replace('Governance','')}</H2>
           </header>
           <div>
             <Inline>
@@ -150,35 +154,39 @@ function App() {
             <Inline>
               <H3>Min Delegates to Quorum w/ ≥ {votingParticipationMin} vote: {calcMinDelegatesToValue(quorum, delegates, votingParticipationMin)}</H3>
             </Inline>
-            <hr />
-            <table style={{textAlign: "right", border: "2px solid white"}}>
-              <tr style={{border: "2px solid white"}}>
-                <th style={{border: "2px solid white"}}>"For"</th>
-                <th style={{border: "2px solid white"}}>"Against"</th>
-                <th style={{border: "2px solid white"}}>Quorum Met</th>
-                <th style={{border: "2px solid white"}}>Proposal Passing</th>
-              </tr>
-              <tr style={{border: "2px solid white"}}>
-                <td style={{border: "2px solid white"}}>{fmt(forVotes)}</td>
-                <td style={{border: "2px solid white"}}>{fmt(noVotes)}</td>
-                <td style={{border: "2px solid white"}}>{forVotes > quorum ? 'YES' : 'NO'}</td>
-                <td style={{border: "2px solid white"}}>{forVotes > quorum && forVotes > noVotes ? 'YES' : 'NO'}</td>
-              </tr>
-            </table>
-            <Inline>
-              <H3>Additional Votes Required: {fmt(votesRequiredToWin)}</H3>
-            </Inline>
-            <Inline>
-              <div>
-                <H3>Vote Combinations</H3>
-                <p style={{margin: "0px"}}>(How many unique combinations of voters are there to pass the proposal. Requiring only 1, 2, 3, etc delegates to act)</p>
-              </div>
-            </Inline>
-            <CombinationsComponent
-              votesRequiredToWin={votesRequiredToWin}
-              remainingDelegates={remainingDelegates}
-              maxDepth={maxDepth}
-            />
+            <Wrapper>
+              <Table style={{textAlign: "right"}}>
+                <tr>
+                  <th>For</th>
+                  <th>Against</th>
+                  <th>Quorum Met</th>
+                  <th>Proposal Passing</th>
+                </tr>
+                <tr>
+                  <td>{fmt(forVotes)}</td>
+                  <td>{fmt(noVotes)}</td>
+                  <td>{forVotes > quorum ? 'YES' : 'NO'}</td>
+                  <td>{forVotes > quorum && forVotes > noVotes ? 'YES' : 'NO'}</td>
+                </tr>
+              </Table>
+              <Inline>
+                <H3>Additional Votes Required: {fmt(votesRequiredToWin)}</H3>
+              </Inline>
+            </Wrapper>
+            <br />
+            <Wrapper>
+              <Inline>
+                <div>
+                  <H3>Vote Combinations</H3>
+                  <p style={{margin: "0px"}}>(How many unique combinations of voters are there to pass the proposal. Requiring only 1, 2, 3, etc delegates to act)</p>
+                </div>
+              </Inline>
+              <CombinationsComponent
+                votesRequiredToWin={votesRequiredToWin}
+                remainingDelegates={remainingDelegates}
+                maxDepth={maxDepth}
+              />
+            </Wrapper>
           </div>
         </div>
       </Web3ReactManager>
